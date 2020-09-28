@@ -201,25 +201,25 @@ Since the client app and the web service run from different domains, we will nee
     ng new angular-app
     ```
 #### Add Http support
-2. Open ***src/app/app.module.ts*** and import the Angular ***HttpClientModule***
-    ```typescript
+2. Open ***src/app/app.module.ts*** and import the Angular ***HttpClientModule***.
+```typescript
     import { NgModule } from '@angular/core';
     import { BrowserModule } from '@angular/platform-browser';
     import { HttpClientModule } from '@angular/common/http';
-
     @NgModule({
     imports: [
-        BrowserModule,
-        // import HttpClientModule after BrowserModule.
-        HttpClientModule,
-    ],
+            BrowserModule,
+            // import HttpClientModule after BrowserModule.
+            HttpClientModule,
+        ],
     declarations: [
-        AppComponent,
-    ],
+            AppComponent,
+        ],
     bootstrap: [ AppComponent ]
     })
     export class AppModule {}
-    ```
+```    
+
 #### Create a model    
 3. Create the folder ***src/app/models***
 4. Inside ***src/app/models*** create a file and name it ***employee.ts***     
@@ -486,7 +486,7 @@ intercept(req: HttpRequest<any>, next: HttpHandler) {
     ...
     ```    
 25. Run both the web service and the angular app, navigate to employees, you should see the data 
-   ![](images/2020-09-28-10-26-55.png)
+   ![](https://github.com/atorres16/angular_webapi_ef_errorhandling/raw/master/images/2020-09-28-10-26-55.png)
 26. Simulate an error from the service and run again, you should get an error alert, press F12 to see the error details in the console   
     ```csharp
     [HttpGet]
@@ -507,7 +507,7 @@ intercept(req: HttpRequest<any>, next: HttpHandler) {
         }
     }
     ```    
-    ![](images/2020-09-28-10-45-54.png)
+    ![](https://github.com/atorres16/angular_webapi_ef_errorhandling/raw/master/images/2020-09-28-10-45-54.png)
     *I think we're getting the error messages 4 times, because we're retrying the request in the employees service*
 
 Keep playing with Angular, post an employee, should feel very straightforward  
