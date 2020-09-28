@@ -202,7 +202,7 @@ Since the client app and the web service run from different domains, we will nee
     ```
 #### Add Http support
 2. Open ***src/app/app.module.ts*** and import the Angular ***HttpClientModule***.
-```typescript
+```javascript
     import { NgModule } from '@angular/core';
     import { BrowserModule } from '@angular/platform-browser';
     import { HttpClientModule } from '@angular/common/http';
@@ -224,7 +224,7 @@ Since the client app and the web service run from different domains, we will nee
 3. Create the folder ***src/app/models***
 4. Inside ***src/app/models*** create a file and name it ***employee.ts***     
 5. Add this code in ***employee.ts***
-    ```typescript
+    ```javascript
     export interface Employee {
     Id: number;
     Name: string;
@@ -238,7 +238,7 @@ Since the client app and the web service run from different domains, we will nee
     ng g service Employees
     ```
 8. Inside ***employees-service.ts*** include this code:
-    ```typescript
+    ```javascript
     import { HttpClient} from '@angular/common/http';
     import { Injectable } from '@angular/core';
     import { Observable } from 'rxjs';
@@ -276,7 +276,7 @@ Since the client app and the web service run from different domains, we will nee
     ```    
     
 9. You'll have to provide the service by adding an entry into the providers array in ***app.module.ts***
-    ```typescript
+    ```javascript
     providers: [
         httpInterceptorProviders,
         HttpErrorHandlerService,
@@ -300,7 +300,7 @@ Since the client app and the web service run from different domains, we will nee
     </ul>
     ```
 13. Replace the code in ***employees-component.ts***
-    ```typescript
+    ```javascript
     import { EmployeesService } from './../../services/employees.service';
     import { Component, OnInit } from '@angular/core';
     import { Employee } from 'src/app/models/employee';
@@ -329,7 +329,7 @@ Since the client app and the web service run from different domains, we will nee
 
 14. Add ***src/app/app-routing.module.ts*** and include this code
 
-    ```typescript
+    ```javascript
     import { EmployeesComponent } from './components/employees/employees.component';
     import { AppComponent } from './app.component';
     import { NgModule, Component } from '@angular/core';
@@ -347,7 +347,7 @@ Since the client app and the web service run from different domains, we will nee
     export class AppRoutingModule { }
     ```
 15. Import the routing module in ***app.module.ts***
-    ```typescript
+    ```javascript
     ...
     imports: [
     BrowserModule,
@@ -370,7 +370,7 @@ To implement some error handling, follow the recommendations provided in the [An
     ng g service HttpErrorHandler
     ```
 18. Include this code in ***http-error-handler-service.ts***
-    ```typescript
+    ```javascript
     handleError = (error: HttpErrorResponse) => {
         if (error.error instanceof ErrorEvent) {
         // A client-side or network error occurred. Handle it accordingly.
@@ -389,7 +389,7 @@ To implement some error handling, follow the recommendations provided in the [An
     }
     ```    
 19. Provide this service in ***app.module.ts***
-    ```typescript
+    ```javascript
     ...
          providers: [
         httpInterceptorProviders,
@@ -402,7 +402,7 @@ Lets configure the app so anytime there's an Http error in any of the services, 
 *Actually, in the [Angular - HTTP Sample](https://stackblitz.com/angular/oevaymgooko?file=src%2Fapp%2Fconfig%2Fconfig.service.ts) the errors are ignored, I think we should show some kind of error to the end user*, in this case we show an ***alert***, but in a real project you would add a CSS popup or something. 
 20. Open ***app.component.ts*** and alter it like this
 
-```typescript
+```javascript
 import { HttpErrorHandler } from './services/http-error-handler.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -427,7 +427,7 @@ ngOnInit(): void {
 We haven't specified the server's URL anywhere, we could create a service to provide the url to all the data services (like ***EmployeesService***), we could repeat the URL in each data service, and there might be many ways to achieve this, for this example, we're going to use an ***HTTP Interceptor*** that will *intercept* each HTTP request and will attach the server's URL before it gets sent to the server.
 21. Create the folder ***src/app/http-interceptors***
 22. Inside this folder create the file ***server-url-interceptor.ts*** and include this code
-```typescript
+```javascript
 import { Injectable } from '@angular/core';
 import {
 HttpEvent, HttpInterceptor, HttpHandler, HttpRequest
@@ -463,7 +463,7 @@ intercept(req: HttpRequest<any>, next: HttpHandler) {
 
 23. You'll need to provide the ***Http interceptor*** to the app, create the file ***src/app/http-interceptors/index.ts*** and include this code:
  
-    ```typescript
+    ```javascript
     /* "Barrel" of Http Interceptors */
     /*https://stackblitz.com/angular/oevaymgooko?file=src%2Fapp%2Fhttp-interceptors%2Findex.ts*/
 
@@ -478,7 +478,7 @@ intercept(req: HttpRequest<any>, next: HttpHandler) {
     ];
     ```
 24. Open ***app.module.ts*** and add an entry for ***httpInterceptorProviders*** in the ***providers*** array
-    ```typescript
+    ```javascript
     ...
       providers: [
     httpInterceptorProviders
