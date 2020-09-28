@@ -75,11 +75,11 @@ In this exercise we're creating a DotNet Web API service that uses Entity Framew
 	```
 12. Verify in your SQL Management Studio that the  database was created correctly
 13. In order to do some tests later, manually insert a record into the **Employees** table
-    ![](images/2020-09-16-11-23-43.png)
+    ![](https://github.com/atorres16/angular_webapi_ef_errorhandling/raw/master/images/2020-09-16-11-23-43.png)
 #### Add a Controller    
 14. Create the Employees controller by right clicking the ***Controllers*** folder and selecting ***Add Controller***
 15. In the ***Add new Scaffolded Item*** window, select ***Web API 2 Controller - Empty***
-![](images/2020-09-16-08-56-44.png)
+![](https://github.com/atorres16/angular_webapi_ef_errorhandling/raw/master/images/2020-09-16-08-56-44.png)
 16. In Controller name, write ***Employees Controller***
 17. Open ***EmployeesController.cs*** and alter it like this:
     ```csharp
