@@ -1,5 +1,6 @@
-# Connect Angular with Web API
-Create a .NET WebAPI service with some controllers and actions that send commands to an SQL database using Entity Framework. Then create an Angular app with a service to send and get json from this service. 
+# Connect Angular with Web API 
+In this exercise we're creating a DotNet Web API service that uses Entity Framework to connect to a MS SQL Server instance to get some data, we're also creating an Angular app to display data from this service, in the process we're including an Http interceptor to fix the server's url for every request and adding some Http error handling.
+
 ## Requirements
 * You have a version of Microsoft SQL Server engine available
 * You should have some notion of how Entity Framework, Angular and Web API work
