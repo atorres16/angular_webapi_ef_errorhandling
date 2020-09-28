@@ -230,14 +230,66 @@ Since the client app and the web service run from different domains, we will nee
     Email: string;
     }
     ```
+#### Employee service    
+6. Create the folder ***src/app/services***
+7. In the terminal navigate to ***src/app/services*** and create the ***EmployeesService***
+    ```
+    ng g service Employees
+    ```
+8. Inside ***employees-service.ts*** include this code:
+    ```typescript
+    import { HttpClient} from '@angular/common/http';
+    import { Injectable } from '@angular/core';
+    import { Observable } from 'rxjs';
+    import { Employee } from '../models/employee';
+    import { catchError, retry } from 'rxjs/operators';
+    import { HttpErrorHandler } from './http-error-handler.service';
+
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class EmployeesService {
+
+    constructor(
+        private httpClient: HttpClient,
+        private httpErrorHandlerService: HttpErrorHandler) {
+    }
+
+    url = 'api/employees/';
+
+
+    getEmployees = (): Observable<Employee[]> => {
+
+        return this.httpClient.get<Employee[]>(
+        this.url + 'GetEmployees'
+        )
+        .pipe(
+            // retry 3 times
+            retry(3),
+            catchError(this.httpErrorHandlerService.handleError)
+        );
+    }
+    }
+
+    ```    
+    
+9. You'll have to provide the service by adding an entry into the providers array in ***app.module.ts***
+    ```typescript
+    providers: [
+        httpInterceptorProviders,
+        HttpErrorHandlerService,
+        EmployeesService
+    ],
+    ```    
 #### Employees component
-6. Create folder ***src/app/components***
-7. In your terminal, navigate to ***src/app/components*** and run
+10. Create folder ***src/app/components***
+11. In your terminal, navigate to ***src/app/components*** and run
     ```
     ng g component Employees
     ```
     *The employees component will be created*
-8. Replace the code in ***employees-component.html***
+12. Replace the code in ***employees-component.html***
     ```html
     <p>Employees</p>
     <ul>
@@ -246,7 +298,7 @@ Since the client app and the web service run from different domains, we will nee
         </li>
     </ul>
     ```
-9. Replace the code in ***employees-component.ts***
+13. Replace the code in ***employees-component.ts***
     ```typescript
     import { EmployeesService } from './../../services/employees.service';
     import { Component, OnInit } from '@angular/core';
@@ -274,7 +326,7 @@ Since the client app and the web service run from different domains, we will nee
 #### Routing    
 *Add routing support in the angular app*
 
-10. Add ***src/app/app-routing.module.ts*** and include this code
+14. Add ***src/app/app-routing.module.ts*** and include this code
 
     ```typescript
     import { EmployeesComponent } from './components/employees/employees.component';
@@ -293,7 +345,7 @@ Since the client app and the web service run from different domains, we will nee
     })
     export class AppRoutingModule { }
     ```
-11. Import the routing module in ***app.module.ts***
+15. Import the routing module in ***app.module.ts***
     ```typescript
     ...
     imports: [
@@ -304,7 +356,7 @@ Since the client app and the web service run from different domains, we will nee
     ....    
     ```
 
-12. Replace the code in ***app.component.html*** with this
+16. Replace the code in ***app.component.html*** with this
     ```html
     <a [routerLink]="['/employees']" routerLinkActive="active">Employees</a>
     <router-outlet></router-outlet>
@@ -312,11 +364,11 @@ Since the client app and the web service run from different domains, we will nee
 #### Error handling in Angular
 To implement some error handling, follow the recommendations provided in the [Angular HTTP guide](https://angular.io/guide/http)  
 
-13. In your terminal navigate to ***src/app/services*** and create a new service    
+17. In your terminal navigate to ***src/app/services*** and create a new service    
     ```
     ng g service HttpErrorHandler
     ```
-14. Include this code in ***http-error-handler-service.ts***
+18. Include this code in ***http-error-handler-service.ts***
     ```typescript
     handleError = (error: HttpErrorResponse) => {
         if (error.error instanceof ErrorEvent) {
@@ -335,7 +387,7 @@ To implement some error handling, follow the recommendations provided in the [An
         'Something bad happened; please try again later.');
     }
     ```    
-15. Provide this service in ***app.module.ts***
+19. Provide this service in ***app.module.ts***
     ```typescript
     ...
          providers: [
@@ -347,31 +399,33 @@ To implement some error handling, follow the recommendations provided in the [An
 ##### Global error message
 Lets configure the app so anytime there's an Http error in any of the services, a generic friendly error to the user is shown.
 *Actually, in the [Angular - HTTP Sample](https://stackblitz.com/angular/oevaymgooko?file=src%2Fapp%2Fconfig%2Fconfig.service.ts) the errors are ignored, I think we should show some kind of error to the end user*, in this case we show an ***alert***, but in a real project you would add a CSS popup or something. 
-16. Open ***app.component.ts*** and alter it like this
+20. Open ***app.component.ts*** and alter it like this
+
 ```typescript
-    import { HttpErrorHandler } from './services/http-error-handler.service';
-    import { Component, OnInit } from '@angular/core';
+import { HttpErrorHandler } from './services/http-error-handler.service';
+import { Component, OnInit } from '@angular/core';
 
-    @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
-    })
-    export class AppComponent implements OnInit {
-    constructor(private httpErrorHandler: HttpErrorHandler) {
-    }
+@Component({
+selector: 'app-root',
+templateUrl: './app.component.html',
+styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+constructor(private httpErrorHandler: HttpErrorHandler) {
+}
 
-    ngOnInit(): void {
-        this.httpErrorHandler.onError.subscribe((err) => {
-        alert(err);
-        });
-    }
-    }
+ngOnInit(): void {
+    this.httpErrorHandler.onError.subscribe((err) => {
+    alert(err);
+    });
+}
+}
 ```
+
 #### Http Interceptor to set the server URL in every request    
 We haven't specified the server's URL anywhere, we could create a service to provide the url to all the data services (like ***EmployeesService***), we could repeat the URL in each data service, and there might be many ways to achieve this, for this example, we're going to use an ***HTTP Interceptor*** that will *intercept* each HTTP request and will attach the server's URL before it gets sent to the server.
-15. Create the folder ***src/app/http-interceptors***
-16. Inside this folder create the file ***server-url-interceptor.ts*** and include this code
+21. Create the folder ***src/app/http-interceptors***
+22. Inside this folder create the file ***server-url-interceptor.ts*** and include this code
 ```typescript
 import { Injectable } from '@angular/core';
 import {
@@ -406,7 +460,7 @@ intercept(req: HttpRequest<any>, next: HttpHandler) {
 ```
 *Don't forget to replace the port in the server's URL*
 
-17. You'll need to provide the ***Http interceptor*** to the app, create the file ***src/app/http-interceptors/index.ts*** and include this code:
+23. You'll need to provide the ***Http interceptor*** to the app, create the file ***src/app/http-interceptors/index.ts*** and include this code:
  
     ```typescript
     /* "Barrel" of Http Interceptors */
@@ -422,69 +476,40 @@ intercept(req: HttpRequest<any>, next: HttpHandler) {
     { provide: HTTP_INTERCEPTORS, useClass: ServerURLInterceptor, multi: true }
     ];
     ```
-18. Open ***app.module.ts*** and add an entry for ***httpInterceptorProviders*** in the ***providers*** array
+24. Open ***app.module.ts*** and add an entry for ***httpInterceptorProviders*** in the ***providers*** array
     ```typescript
     ...
       providers: [
     httpInterceptorProviders
     ],
     ...
-    ```
-19. Click the ***employees*** link, so the router will take to http://localhost:4200/employees
-    You should see the data
-    ![](images/2020-09-23-13-48-01.png)    
-
-#### Employee service    
-20. Create the folder ***src/app/services***
-21. In the terminal navigate to ***src/app/services*** and create the ***EmployeesService***
-    ```
-    ng g service Employees
-    ```
-22. Inside ***employees-service.ts*** include this code:
-    ```typescript
-    import { HttpClient} from '@angular/common/http';
-    import { Injectable } from '@angular/core';
-    import { Observable } from 'rxjs';
-    import { Employee } from '../models/employee';
-    import { catchError, retry } from 'rxjs/operators';
-    import { HttpErrorHandler } from './http-error-handler.service';
-
-
-    @Injectable({
-    providedIn: 'root'
-    })
-    export class EmployeesService {
-
-    constructor(
-        private httpClient: HttpClient,
-        private httpErrorHandlerService: HttpErrorHandler) {
-    }
-
-    url = 'api/employees/';
-
-
-    getEmployees = (): Observable<Employee[]> => {
-        return this.httpClient.get<Employee[]>(
-        this.url + 'GetEmployees'
-        )
-        .pipe(
-            // retry 3 times
-            retry(3),
-            catchError(this.httpErrorHandlerService.handleError)
-        );
-    }
+    ```    
+25. Run both the web service and the angular app, navigate to employees, you should see the data 
+   ![](images/2020-09-28-10-26-55.png)
+26. Simulate an error from the service and run again, you should get an error alert, press F12 to see the error details in the console   
+    ```csharp
+    [HttpGet]
+    [Route("GetEmployees")]
+    public async Task<IHttpActionResult> GetEmployeesAsync()
+    {
+        try
+        {
+            using (DataContext db = new DataContext())
+            {
+                return InternalServerError(new InvalidProgramException("FAKE ERROR"));
+                return Ok(await db.Employees.ToListAsync());
+            }
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
     }
     ```    
-23. You'll have to provide the service by adding an entry into the providers array in ***app.module.ts***
-    ```typescript
-    providers: [
-        httpInterceptorProviders,
-        HttpErrorHandlerService,
-        EmployeesService
-    ],
-    ```    
+    ![](images/2020-09-28-10-45-54.png)
+    *I think we're getting the error messages 4 times, because we're retrying the request in the employees service*
 
-Keep playing with Angular, post an employee, should be very straightforward  
+Keep playing with Angular, post an employee, should feel very straightforward  
 
 
 ## References

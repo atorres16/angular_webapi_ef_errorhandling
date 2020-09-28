@@ -25,7 +25,7 @@ namespace Angular_EF_Web_API.Controllers
             {
                 using (DataContext db = new DataContext())
                 {
-                    return InternalServerError(new InvalidProgramException("TEST"));
+                    return InternalServerError(new InvalidProgramException("FAKE ERROR"));
                     return Ok(await db.Employees.ToListAsync());
                 }
             }
