@@ -540,3 +540,5 @@ Keep playing with Angular, post an employee, should feel very straightforward
 * [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
 * [How to enable CORS between angular and ASPNET WebAPI](https://softdevnotesntips.blogspot.com/2020/09/how-to-enable-cors-between-angular-app.html)
 * [Angular HTTP Interceptor](https://angular.io/api/common/http/HttpInterceptor)
+## Source Code
+https://github.com/atorres16/angular_webapi_ef_errorhandling
