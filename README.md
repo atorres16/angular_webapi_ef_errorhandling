@@ -371,6 +371,17 @@ To implement some error handling, follow the recommendations provided in the [An
     ```
 18. Include this code in ***http-error-handler-service.ts***
     ```javascript
+    import { HttpErrorResponse } from '@angular/common/http';
+    import { EventEmitter, Injectable } from '@angular/core';
+    import { Observable, of, throwError } from 'rxjs';
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class HttpErrorHandler {
+    constructor() { }
+    public onError: EventEmitter<string> = new EventEmitter<string>();
+
     handleError = (error: HttpErrorResponse) => {
         if (error.error instanceof ErrorEvent) {
         // A client-side or network error occurred. Handle it accordingly.
@@ -380,12 +391,15 @@ To implement some error handling, follow the recommendations provided in the [An
         // The response body may contain clues as to what went wrong.
         console.error(
             `Backend returned code ${error.status}, ` +
-            `body was: ${error.error}`);
+            `Error body next:`);
+        console.error(error.error);
+
         }
         // Return an observable with a user-facing error message.
         this.onError.emit('Something bad happened; please try again later.');
         return throwError(
         'Something bad happened; please try again later.');
+    }
     }
     ```    
 19. Provide this service in ***app.module.ts***
